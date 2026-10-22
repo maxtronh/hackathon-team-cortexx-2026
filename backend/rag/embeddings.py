@@ -211,26 +211,27 @@ class MockDeterministicEmbedder(BaseEmbedder):
 DeterministicOfflineEmbedder = MockDeterministicEmbedder
 
 
+import sys
+
 def get_default_embedder(allow_mock: bool = False) -> BaseEmbedder:
     """
     Factory to retrieve active embedder.
-    If RAG_EMBEDDING_PROVIDER is 'mock' or allow_mock is True, returns MockDeterministicEmbedder.
-    Otherwise attempts to configure GeminiEmbedder. If GEMINI_API_KEY is not set,
-    raises EmbeddingConfigurationError with instructions.
+    In testing environments ('test' in sys.argv or RAG_EMBEDDING_PROVIDER='mock'),
+    returns MockDeterministicEmbedder so all automated tests run offline deterministically.
+    In live production, returns GeminiEmbedder (requires GEMINI_API_KEY or GOOGLE_API_KEY).
     """
     provider = os.environ.get("RAG_EMBEDDING_PROVIDER", EMBEDDING_PROVIDER).lower()
 
-    if provider == "mock" or allow_mock:
+    # Automatically use mock embedder during test execution or when explicitly requested
+    is_testing = ('test' in sys.argv) or (os.environ.get("DJANGO_TESTING") == "true") or allow_mock
+    if provider == "mock" or is_testing:
         return MockDeterministicEmbedder()
 
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     if not api_key:
-        # If running in test or local without key, check if mock fallback is permitted
-        if os.environ.get("DJANGO_TESTING") == "true":
-            return MockDeterministicEmbedder()
         raise EmbeddingConfigurationError(
             "GEMINI_API_KEY is not configured in the server environment. "
-            "Please set GEMINI_API_KEY in your environment or set RAG_EMBEDDING_PROVIDER='mock' for local offline testing."
+            "Please set GEMINI_API_KEY in your environment, or set RAG_EMBEDDING_PROVIDER='mock' for local offline testing."
         )
 
     return GeminiEmbedder(api_key=api_key)
