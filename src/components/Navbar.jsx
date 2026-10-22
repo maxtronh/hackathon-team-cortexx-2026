@@ -14,7 +14,12 @@ export default function Navbar() {
         <li><a href="#signup" className="navbar-cta">Get Started</a></li>
       </ul>
 
-      <button className="navbar-toggle" onClick={() => setOpen(!open)}>
+      <button
+        className="navbar-toggle"
+        onClick={() => setOpen(!open)}
+        aria-label={open ? 'Close menu' : 'Open menu'}
+        aria-expanded={open}
+      >
         {open ? '✕' : '☰'}
       </button>
     </nav>
