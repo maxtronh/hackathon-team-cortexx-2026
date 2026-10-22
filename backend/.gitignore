@@ -12,3 +12,8 @@ __pycache__/
 *.sqlite3
 .env
 .env.*
+
+# Vector store data & index persistence
+data/
+storage/
+*.index

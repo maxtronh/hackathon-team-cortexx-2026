@@ -1,0 +1,14 @@
+asgiref==3.12.1
+certifi==2026.10.19
+charset-normalizer==3.5.2
+Django==6.1.2
+django-cors-headers==4.9.0
+faiss-cpu==1.15.1
+idna==3.20
+numpy==2.5.4
+packaging==26.3
+pypdf==6.21.2
+requests==2.34.2
+sqlparse==0.6.0
+tzdata==2026.5
+urllib3==2.8.0

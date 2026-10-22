@@ -22,12 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Secrets
-.env
-.env.local
-.env.*.local
-
-# Windows
-Thumbs.db
-Desktop.ini

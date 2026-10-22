@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'core',
+    'rag',
 ]
 
 MIDDLEWARE = [
